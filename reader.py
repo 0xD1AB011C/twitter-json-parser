@@ -3,12 +3,12 @@ import json
 from collections import Counter
 from statistics import mean
 import csv
-from os.path import exists
+import os.path
 
 
 #Changeable constants
 MAXLINES = 3000
-TEST_MODE = True #Limits the amount of lines read to MAXLINES
+TEST_MODE = False #Limits the amount of lines read to MAXLINES
 badWords = ["the", "rt", "by", "to", "and", "by", "are", "a", "is", "as",
             "you", "I", "not", "their", "of",'a', 'about', 'all', 'an',
             'another', 'any', 'around', 'at', 'bad', 'beautiful', 'been',
@@ -268,7 +268,6 @@ def finalizeData(data):
         c = Counter(data[targetIndex][4])
         x = c.most_common(25)
         tmp = []
-        print(x)
         for i in x:
             tmp.append(i[0])
         data[targetIndex][4].clear()
@@ -308,10 +307,11 @@ def finalizeData(data):
     return data
 
 
-def exportData(data):
+def exportData(data, filename):
     print("Writing to .CSV!")
     for targetIndex in range(len(data)):
-        writeLine = [   data[targetIndex][1][0], data[targetIndex][2][0], data[targetIndex][3][0], data[targetIndex][4][0], data[targetIndex][5], data[targetIndex][6][0], data[targetIndex][7][0]     ]
+        filename = os.path.splitext(filename)[0]
+        writeLine = [     filename,  data[targetIndex][1][0], data[targetIndex][2][0], data[targetIndex][3][0], data[targetIndex][4][0], data[targetIndex][5], data[targetIndex][6][0], data[targetIndex][7][0]     ]
         name = data[targetIndex][0] + ".csv"
         with open(str(name), 'a', encoding='UTF8', newline='') as f:
             writer_object = csv.writer(f)
@@ -325,16 +325,15 @@ def main():
     print("See README.TXT")
     print("\n\nEnter the filenames to parse in the format:\nfilename.json, filename.json, filename.json\n")
 
-    #x = input()
-    x = "2020-03-01.json"
+    x = input()
+    #x = "2020-03-01.json"
     totalStartTime = time.process_time()
     list = x.split (",")
     for i in list:
         i = i.lstrip()
         data = parseDay(i, TEST_MODE) #2nd arg: 0 or 1 limit enabled #3rd arg limit amount if limit enabled (default 1k)
-    finalData = finalizeData(data)
-
-    exportData(finalData)
+        finalData = finalizeData(data)
+        exportData(finalData, i)
 
     print("TOTAL time taken: " + str((time.process_time() - totalStartTime)) + "s")
 
