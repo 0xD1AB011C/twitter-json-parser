@@ -28,24 +28,20 @@ This parser scrapes a pre-dumped .json from the twitter API.
 
 The data format is as follows for those files:
 
-DATE |  LOCATIONS | TWEET_IDS | VPOS | POS | NEU | NEG | VNEG | HASHTAGS | GEOCORDS
+DATE |  HASHTAGS | TWEET_IDS | MENTIONS | LOCATIONS | COORDINATES | EMOTIONS | TOP_WORDS
 
-Date: The filename of the parsed original .json dumped
+DATE: The filename of the parsed original .json dumped
 
-Locations: An array of the users locations for the given data, sorted by most frequent
+HASHTAGS: An array of the top hashtags used when tweeting about the given subject, sorted in decsending order
 
-Tweet ids: A tuple array of the most popular / influential tweets and a boolean flag that declares if the user was verified
+TWEET_IDS: A 2D array composing of the top 50 tweets for the given subject for the day. Entries in the array follow (TWEET_ID, BOOL VERIFIED, TWEET_SCORE)
 
-VPOS: The tweets estimated 'Very positive' emotion probability
+MENTIONS: An array of the most mentioned users when tweeting about the given subject.
 
-POS: The tweets estimated 'Positive' emotion probability
+LOCATIONS: An array of the most popular locations, set by the individual user for their account information, not necessarily where the tweet was from.
 
-NEU: The tweets estimated 'Neutral' emotion probability
+COORDINATES: An array of any found coordinates for any tweets about the given subject.
 
-NEG: The tweets estimated 'Negative' emotion probability
+EMOTIONS: An array of length 4, containing: VERY_POSITIVE, POSITIVE, NEUTRAL, NEGATIVE, VERY_NEGATIVE. These are average predictions about the tone of all tweets for that day.
 
-VNEG: The tweets estimated 'Very negative' emotion probability
-
-HASHTAGS: The hashtags most commonly used with the topic in question, in descending order
-
-GEOCORDS: The tweets co-ordinates, should they be found
+TOP_WORDS: The most frequent words used when talking about the given subject.
